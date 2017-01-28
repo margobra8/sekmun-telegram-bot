@@ -8,14 +8,13 @@ from telegram.ext import Updater, CommandHandler
 from telegram.ext import MessageHandler, Filters
 
 # Set up updater and dispatcher
-updater = Updater(token='290913070:AAFuAm5U7vZs5wiM5ip3u99VpuNCGXHiq_c')
+TOKEN = open("token.txt", "r").read()
+updater = Updater(token=TOKEN)
 dispatcher = updater.dispatcher
 
 # Logging
 import logging
 logging.basicConfig(level=logging.DEBUG)
-
-TOKEN = open("token.txt", "r").read()
 
 # Lista de Usuarios
 
