@@ -8,7 +8,8 @@ from telegram.ext import Updater, CommandHandler
 from telegram.ext import MessageHandler, Filters
 
 # Set up updater and dispatcher
-TOKEN = open("token.txt", "r").read()
+from config import TOKEN
+print("Token: " + TOKEN)
 updater = Updater(token=TOKEN)
 dispatcher = updater.dispatcher
 
