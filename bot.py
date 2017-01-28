@@ -9,7 +9,6 @@ from telegram.ext import MessageHandler, Filters
 
 # Set up updater and dispatcher
 from config import TOKEN
-print("Token: " + TOKEN)
 updater = Updater(token=TOKEN)
 dispatcher = updater.dispatcher
 
