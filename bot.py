@@ -35,6 +35,9 @@ def keywords(mensaje_str):
 	elif re.compile(r"moci(o|ó)?n(es)? de duda(s)?", re.IGNORECASE).search(msg):
 		return open("mociones/mocion_duda.txt", "r").read()
 	
+	elif re.compile(r"moci(o|ó)?n(es)? de privilegio(s)?", re.IGNORECASE).search(msg):
+		return open("mociones/mocion_privilegio.txt", "r").read()
+	
 	elif re.compile(r"moci(o|ó)?n(es)?", re.IGNORECASE).search(msg):
 		return open("mociones/mociones.txt", "r").read()
 	
