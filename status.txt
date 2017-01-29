@@ -1,0 +1,10 @@
+﻿*Estado del servicio*:
+
+Servidor del bot - ✔️
+Servidor de Inteligencia Artificial - ✔️
+Sitio SEKMUN - ✔️
+Servicios Twitter - ✔️
+Servicios Telegram - ✔️
+Base de conocimiento - ❓
+
+_{moment}_

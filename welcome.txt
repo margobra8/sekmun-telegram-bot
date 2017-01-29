@@ -1,19 +1,18 @@
-*¡Hola! Soy el bot de SEKMUN en Telegram!*
+*¡Hola! ¡Soy el bot oficial de SEKMUN en Telegram!*
 
 Puedo proporcionarte información útil sobre SEKMUN además de informarte sobre noticias o eventos importantes.
 
 1. Funciones:
 _Búsqueda rápida_ - Manda un mensaje con tu búsqueda para obtener información sobre aspectos esenciales del protocolo
 _Noticias SEKMUN_ - Te notificaré automáticamente cada vez que se publique información importante o noticias sobre SEKMUN
-/manual - Obtén una copia del manual al instante y compatible con conexiones lentas
+/manual - Obtén una copia del manual al instante y optimizada para conexiones lentas
+/status - Comprueba el estado y funcionamiento del bot (por si algo no funciona)
+/about - Información sobre el bot y su creación
 
 *Usa* /ayuda *cuando quieras para volver a mostrar este mensaje*
 
-2. Próximas funciones:
+_2. En etapa de desarrollo:
 /autoridades - Proporciona los nombres de las autoridades por comités
-/temas - Información Básica sobre los temas
-/docs - Enlaces a documentos suplementarios y a enlaces
-/hoy - Proporciona el horario de SEKMUN de hoy de forma resumida
-
-`v0.2a | @margobra8` [+info](http://bit.ly/sekmunbot)
-© 2017 -  Institución Educativa SEK
+/temas - Información Básica sobre los temas y subtemas
+/docs - Enlaces a documentos suplementarios y a sitios web
+/hoy - Proporciona el horario de SEKMUN de hoy de forma resumida_
