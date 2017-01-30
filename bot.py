@@ -38,11 +38,11 @@ user_set = set()
 
 # Términos de búsqueda e información en Regex
 paths = {
-	r"(?i)moci[oó]?n(es)?.+?(procedimiento)s?": "mociones/mocion_procedimiento.txt",
-	r"(?i)moci[oó]?n(es)?.+?[óo]?rden(es)?": "mociones/mocion_orden.txt",
-	r"(?i)moci[oó]?n(es)?.+?duda(s)?": "mociones/mocion_duda.txt",
-	r"(?i)moci[oó]?n(es)?.+?(privilegio)s?": "mociones/mocion_privilegio.txt",
 	r"(?i)moci[oó]?n(es)?": "mociones/mociones.txt",
+	r"(?i)(procedimiento)s?": "mociones/mocion_procedimiento.txt",
+	r"(?i)[óo]?rden(es)?": "mociones/mocion_orden.txt",
+	r"(?i)duda(s)?": "mociones/mocion_duda.txt",
+	r"(?i)(privilegio)s?": "mociones/mocion_privilegio.txt",
 	r"(?i)caucus simples?": "caucus/simple.txt",
 	r"(?i)caucus moderados?": "caucus/moderado.txt",
 	r"(?i)caucus": "caucus/index.txt",
