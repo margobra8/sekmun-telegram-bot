@@ -46,28 +46,35 @@ paths = {
 	r"(?i)caucus simples?": "caucus/simple.txt",
 	r"(?i)caucus moderados?": "caucus/moderado.txt",
 	r"(?i)caucus": "caucus/index.txt",
-	r"(?i)defender.+?anteproyectos?": "debate_particular/index.txt",
-	r"(?i)debates?": "debate_particular/index.txt",
+	r"(?i)debates?|defender.+?anteproyectos?": "debate_particular/index.txt",
 	r"(?i)anteproyectos?": "anteproyecto/index.txt",
+	r"(?i)autoridad(es)?": "consultas/autoridades.txt",
+	r"(?i)mesas?.+?aprobaci[oó]?n": "consultas/mesa_de_aprobacion.txt",
+	r"(?i)moderador(es)?": "consultas/moderador.txt",
+	r"(?i)oficial(es)?.+?conferencias?": "consultas/oficial_conferencias.txt",
+	r"(?i)pajes?": "consultas/pajes.txt",
+	r"(?i)presidencias?|presidentes?|presidentas?": "consultas/presidencia.txt",
+	r"(?i)protocolos?": "consultas/protocolo.txt",
+	r"(?i)rrpp|relacion(es)?.+?p[úu]blicas?|prensa|periodistas?": "consultas/rrpp.txt",
 }
 
 # Errores de búsqueda
-error_notfound = "❌ _*ERROR*_\n\nNo se han encontrado resultados de búsqueda para\n<`{query}`> 😕\n\nSi necesitas ejecutar un comando usa /ayuda para ver la lista."
+error_notfound = "search_notfound.txt"
 
 # Main method
 def info_query(msg):
+	logging.info("LOOKUP STARTED")
 	for regex, path in paths.items():	
-		logging.info("SCAN " + regex)
 		if re.search(regex, msg):
 			time.sleep(0.1)
 			logging.info("FOUND " + regex)
-			return open(path).read()
-					
+			NotFound = False
+			return (open(path).read(), True)
 		else:
 			NotFound = True
 	if NotFound:
 		logging.info("NOT FOUND " + msg)
-		return error_notfound.format(query=msg)
+		return (open(error_notfound).read().format(query=msg), False)
 		
 # ----------------------------------------- Comandos -----------------------------------------
 
@@ -89,11 +96,15 @@ def start(bot, update):
 	bot.sendMessage(chat_id=update.message.chat_id, text=response, parse_mode="Markdown")
 	
 def ayuda(bot, update):
+	message = update.message.text
+	logging.info("COMMAND RX " + str(update.message.chat_id) + ": " +  message)
 	# Enviar mensaje de bienvenida/ayuda
 	bot.sendMessage(chat_id=update.message.chat_id, text=open("welcome.txt", "r").read(), parse_mode="Markdown")
 	
 # Manual
 def manual(bot, update):
+	message = update.message.text
+	logging.info("COMMAND RX " + str(update.message.chat_id) + ": " +  message)
 	bot.sendChatAction(chat_id=update.message.chat_id, action=ChatAction.UPLOAD_DOCUMENT)
 	manual_pdf = open("manual.pdf", "rb")
 	time.sleep(1)
@@ -101,18 +112,31 @@ def manual(bot, update):
 
 # Status
 def status(bot, update):
+	message = update.message.text
+	logging.info("COMMAND RX " + str(update.message.chat_id) + ": " +  message)
 	timestamp_status = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
-	response = open("status.txt", "r", encoding="utf-8").read().format(moment=timestamp_status)
-	bot.sendMessage(chat_id=update.message.chat_id, text=reply, parse_mode="Markdown")
+	import platform
+	VENV_OS = platform.platform()
+	response = open("status.txt", "r", encoding="utf-8").read().format(moment=timestamp_status, user_count=str(len(user_set)), system=VENV_OS)
+	bot.sendMessage(chat_id=update.message.chat_id, text=response, parse_mode="Markdown")
 	
 # About
 def about(bot, update):
+	message = update.message.text
+	logging.info("COMMAND RX " + str(update.message.chat_id) + ": " +  message)
 	reply = open("about.txt", "r").read()
 	bot.sendMessage(chat_id=update.message.chat_id, text=reply, parse_mode="Markdown")
 	
+def leave(bot, update):
+	message = update.message.text
+	logging.info("COMMAND RX " + str(update.message.chat_id) + ": " +  message)
+	bot.sendMessage(chat_id=update.message.chat_id, text="¡Hasta luego!\n\n_Psst_ Si necesitas volver a activarme envía /start", parse_mode="Markdown")
+	bot.leaveChat(chat_id=update.message.chat_id)
 
 # Comando Desconocido
 def unknown(bot, update):
+	message = update.message.text
+	logging.info("COMMAND RX " + str(update.message.chat_id) + ": " +  message)
 	bot.sendMessage(chat_id=update.message.chat_id, text="Lo siento, no reconozco ese comando 😕")
 
 # --------------------------------------------------------------------------------------------
@@ -123,7 +147,12 @@ def text_parser(bot, update):
 	logging.info("QUERY RX " + str(update.message.chat_id) + ": " +  message)
 	bot.sendChatAction(chat_id=update.message.chat_id, action=ChatAction.TYPING)
 	response = info_query(message)
-	bot.sendMessage(chat_id=update.message.chat_id, text=response, parse_mode="Markdown")
+	text = response[0]
+	SearchSucceeded = response[1]
+	if not SearchSucceeded:
+		bot.sendMessage(chat_id=update.message.chat_id, text=text, parse_mode="Markdown", disable_web_page_preview=True)
+	else:
+		bot.sendMessage(chat_id=update.message.chat_id, text=text, parse_mode="Markdown")
 	logging.info("TX")
 	
 # Command Handlers
@@ -131,12 +160,14 @@ start_handler = CommandHandler('start', start)
 dispatcher.add_handler(start_handler)
 manual_handler = CommandHandler('manual', manual)
 dispatcher.add_handler(manual_handler)
-ayuda_handler = CommandHandler('ayuda', start)
+ayuda_handler = CommandHandler('ayuda', ayuda)
 dispatcher.add_handler(ayuda_handler)
 status_handler = CommandHandler('status', status)
 dispatcher.add_handler(status_handler)
 about_handler = CommandHandler('about', about)
 dispatcher.add_handler(about_handler)
+leave_handler = CommandHandler('desconectar', leave)
+dispatcher.add_handler(leave_handler)
 
 
 # Message Handlers
@@ -146,5 +177,6 @@ query_handler = MessageHandler(Filters.text, text_parser)
 dispatcher.add_handler(query_handler)
 
 # Iniciar bot
+logging.info("BOT INSTANCE INITIATED AT " + datetime.now().strftime('%d/%m/%Y %H:%M:%S'))
 updater.start_polling()
 updater.idle()

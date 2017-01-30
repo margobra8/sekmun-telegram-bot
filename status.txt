@@ -1,10 +1,16 @@
-﻿*Estado del servicio*:
+﻿Estado del servicio:
 
-Servidor del bot - ✔️
-Servidor de Inteligencia Artificial - ✔️
-Sitio SEKMUN - ✔️
-Servicios Twitter - ✔️
-Servicios Telegram - ✔️
-Base de conocimiento - ❓
+✅ Servidor del bot (Heroku) 
+✅ API de IA (IBM Watson) 
+✅ Sitio SEKMUN 
+❌ Servicios Twitter 
+❌ Servicios RSS 
+✅ Servicios Telegram 
+Base de conocimiento - En desarrollo
 
-_{moment}_
+Estadísticas:
+📡 {user_count} usuarios en línea
+
+{moment}
+Corriendo en:
+{system}

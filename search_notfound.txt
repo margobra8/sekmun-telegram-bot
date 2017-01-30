@@ -1,7 +1,11 @@
-﻿❌ _*ERROR*_
-
-No se han encontrado resultados de búsqueda para
-<`{}`> 😕
+*## ERROR ##*
+No se han encontrado resultados de b�squeda para
+`{query}`
 
 Si necesitas ejecutar un comando usa
-\/ayuda para ver la lista.
+/ayuda para ver la lista.
+
+Tambi�n puedes:
+[Buscar en web SEKMUN](http://www.sekmun.blogsek.es/?s={query})
+[Buscar en Google](https://www.google.es/search?q=sekmun+{query})
+Contactar con un humano (@margobra8)
