@@ -5,6 +5,7 @@ TODO
 * Mejorar el sistema de búsqueda por una API o mejorar el Regex
 * Implementar noticias por RSS y Twitter
 * Desarrollar los comandos de autoridades, docs....
+* Cambiar todo el procesamiento Markdown por HTML para los documentos
 * Incluir más resultados de búsqueda sobre sekmun, cuándo, etc...
 * Deploy en Heroku/c9
 
