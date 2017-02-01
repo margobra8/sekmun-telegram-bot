@@ -1,7 +1,7 @@
 *SEKMUN Bot*, desarrollado por Marcos Gómez (@margobra8)
 _Dedicado a toda la comunidad educativa que hace de SEKMUN algo increíble_
 
-Versión `v0.2a`
+Versión `v0.5a`
 [+info](http://bit.ly/sekmunbot) | [Código Fuente](http://github.com/margobra8/sekmun-telegram-bot)
 
 Open Source: publicado bajo la [Licencia MIT](https://github.com/margobra8/sekmun-telegram-bot/blob/master/LICENSE.md)

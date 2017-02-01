@@ -35,6 +35,17 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 # Lista de Usuarios
 user_set = set()
 
+# Temas y subtemas
+paths_temas = {
+	r"(?i)asambleas?": "temas/asamblea.txt",
+	r"(?i)consejos?.+?seguridad?": "temas/consejo_seguridad.txt",
+	r"(?i)unicef": "temas/unicef.txt",
+	r"(?i)unwot|turismo": "temas/unwot.txt",
+	r"(?i)human.+?rights?|derechos?.+?humanos?": "temas/ddhh.txt",
+	r"(?i)unesco": "temas/unesco.txt",
+	r"(?i)ecosoc": "temas/ecosoc.txt",
+	r"(?i)fao": "temas/fao.txt",
+	}
 
 # Términos de búsqueda e información en Regex
 paths = {
@@ -61,7 +72,7 @@ paths = {
 # Errores de búsqueda
 error_notfound = "search_notfound.txt"
 
-# Main method
+# Main method info
 def info_query(msg):
 	logging.info("LOOKUP STARTED")
 	for regex, path in paths.items():	
@@ -75,6 +86,22 @@ def info_query(msg):
 	if NotFound:
 		logging.info("NOT FOUND " + msg)
 		return (open(error_notfound).read().format(query=msg), False)
+		
+# Temas lookup method
+def temas_query(args):
+	logging.info("LOOKUP TEMAS STARTED")
+	for regex, path in paths_temas.items():
+		logging.info("SCAN " + regex)
+		if re.search(regex, args):
+			time.sleep(0.1)
+			logging.info("FOUND " + regex)
+			NotFound = False
+			return (open(path).read(), True)
+		else:
+			NotFound = True
+	if NotFound:
+		logging.info("NOT FOUND TEMAS " + args)
+		return (open(error_notfound).read().format(query=args), False)
 		
 # ----------------------------------------- Comandos -----------------------------------------
 
@@ -119,7 +146,25 @@ def status(bot, update):
 	VENV_OS = platform.platform()
 	response = open("status.txt", "r", encoding="utf-8").read().format(moment=timestamp_status, user_count=str(len(user_set)), system=VENV_OS)
 	bot.sendMessage(chat_id=update.message.chat_id, text=response, parse_mode="Markdown")
-	
+
+# temas
+def temas(bot, update, args: str):
+	# TODO: HACER TODO ESTO CON RESPONSE MARKDOWN con los temas para evitar el /temas (comité)
+	# TODO: TERMINAR DOCUMENTACION TEMAS
+	argumentos = " ".join(args)
+	if not argumentos:
+		bot.sendMessage(chat_id=update.message.chat_id, text="Por favor, especifica el comité para los temas y subtemas de la forma\n`/temas (comité)`", parse_mode="Markdown")
+	else:
+		logging.info("TEMAS QUERY RX " + str(update.message.chat_id) + ": " +  argumentos)
+		bot.sendChatAction(chat_id=update.message.chat_id, action=ChatAction.TYPING)
+		response = temas_query(argumentos)
+		text = response[0]
+		SearchSucceeded = response[1]
+		if not SearchSucceeded:
+			bot.sendMessage(chat_id=update.message.chat_id, text=text, parse_mode="Markdown", disable_web_page_preview=True)
+		else:
+			bot.sendMessage(chat_id=update.message.chat_id, text=text, parse_mode="Markdown")
+		
 # About
 def about(bot, update):
 	message = update.message.text
@@ -153,7 +198,6 @@ def text_parser(bot, update):
 		bot.sendMessage(chat_id=update.message.chat_id, text=text, parse_mode="Markdown", disable_web_page_preview=True)
 	else:
 		bot.sendMessage(chat_id=update.message.chat_id, text=text, parse_mode="Markdown")
-	logging.info("TX")
 	
 # Command Handlers
 start_handler = CommandHandler('start', start)
@@ -168,6 +212,8 @@ about_handler = CommandHandler('about', about)
 dispatcher.add_handler(about_handler)
 leave_handler = CommandHandler('desconectar', leave)
 dispatcher.add_handler(leave_handler)
+temas_handler = CommandHandler('temas', temas, pass_args=True)
+dispatcher.add_handler(temas_handler)
 
 
 # Message Handlers
