@@ -1,11 +1,11 @@
 *## ERROR ##*
-No se han encontrado resultados de búsqueda para
+No se han encontrado resultados de bÃºsqueda para
 `{query}`
 
 Si necesitas ejecutar un comando usa
 /ayuda para ver la lista.
 
-También puedes:
+TambiÃ©n puedes:
 [Buscar en web SEKMUN](http://www.sekmun.blogsek.es/?s={query})
 [Buscar en Google](https://www.google.es/search?q=sekmun+{query})
 Contactar con un humano (@margobra8)
