@@ -170,7 +170,7 @@ def about(bot, update):
 	message = update.message.text
 	logging.info("COMMAND RX " + str(update.message.chat_id) + ": " +  message)
 	reply = open("about.txt", "r").read()
-	bot.sendMessage(chat_id=update.message.chat_id, text=reply, parse_mode="Markdown")
+	bot.sendMessage(chat_id=update.message.chat_id, text=reply, parse_mode="Markdown", disable_web_page_preview=True)
 	
 def leave(bot, update):
 	message = update.message.text
