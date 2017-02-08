@@ -145,7 +145,7 @@ def status(bot, update):
 	import platform
 	VENV_OS = platform.platform()
 	response = open("status.txt", "r", encoding="utf-8").read().format(moment=timestamp_status, user_count=str(len(user_set)), system=VENV_OS)
-	bot.sendMessage(chat_id=update.message.chat_id, text=response, parse_mode="Markdown")
+	bot.sendMessage(chat_id=update.message.chat_id, text=response, parse_mode="Markdown", disable_web_page_preview=True)
 
 # temas
 def temas(bot, update, args: str):
