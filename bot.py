@@ -31,6 +31,7 @@ dispatcher = updater.dispatcher
 # Logging
 import logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Lista de Usuarios
 user_set = set()
@@ -38,10 +39,10 @@ user_set = set()
 # Temas y subtemas
 paths_temas = {
 	r"(?i)asambleas?": "temas/asamblea.txt",
-	r"(?i)consejos?.+?seguridad?": "temas/consejo_seguridad.txt",
+	r"(?i)consejos?.+?seguridad?|cs": "temas/consejo_seguridad.txt",
 	r"(?i)unicef": "temas/unicef.txt",
 	r"(?i)unwot|turismo": "temas/unwot.txt",
-	r"(?i)human.+?rights?|derechos?.+?humanos?": "temas/ddhh.txt",
+	r"(?i)human.+?rights?|derechos?.+?humanos?|ddhh": "temas/ddhh.txt",
 	r"(?i)unesco": "temas/unesco.txt",
 	r"(?i)ecosoc": "temas/ecosoc.txt",
 	r"(?i)fao": "temas/fao.txt",
@@ -54,9 +55,8 @@ paths = {
 	r"(?i)[óo]?rden(es)?": "mociones/mocion_orden.txt",
 	r"(?i)duda(s)?": "mociones/mocion_duda.txt",
 	r"(?i)(privilegio)s?": "mociones/mocion_privilegio.txt",
-	r"(?i)caucus simples?": "caucus/simple.txt",
-	r"(?i)caucus moderados?": "caucus/moderado.txt",
-	r"(?i)caucus": "caucus/index.txt",
+	r"(?i)caucus.+?simples?": "caucus/simple.txt",
+	r"(?i)caucus.+?moderados?": "caucus/moderado.txt",
 	r"(?i)debates?|defender.+?anteproyectos?": "debate_particular/index.txt",
 	r"(?i)anteproyectos?": "anteproyecto/index.txt",
 	r"(?i)autoridad(es)?": "consultas/autoridades.txt",
@@ -67,6 +67,7 @@ paths = {
 	r"(?i)presidencias?|presidentes?|presidentas?": "consultas/presidencia.txt",
 	r"(?i)protocolos?": "consultas/protocolo.txt",
 	r"(?i)rrpp|relacion(es)?.+?p[úu]blicas?|prensa|periodistas?": "consultas/rrpp.txt",
+	r"(?i)caucus": "caucus/index.txt",
 }
 
 # Errores de búsqueda
@@ -75,17 +76,16 @@ error_notfound = "search_notfound.txt"
 # Main method info
 def info_query(msg):
 	logging.info("LOOKUP STARTED")
-	for regex, path in paths.items():	
+	for regex, path in sorted(paths.items(), reverse=True):	
 		if re.search(regex, msg):
-			time.sleep(0.1)
 			logging.info("FOUND " + regex)
 			NotFound = False
-			return (open(path).read(), True)
+			return (open(path, "r").read(), True)
 		else:
 			NotFound = True
 	if NotFound:
 		logging.info("NOT FOUND " + msg)
-		return (open(error_notfound).read().format(query=msg), False)
+		return (open(error_notfound, "r").read().format(query=msg), False)
 		
 # Temas lookup method
 def temas_query(args):
@@ -93,15 +93,14 @@ def temas_query(args):
 	for regex, path in paths_temas.items():
 		logging.info("SCAN " + regex)
 		if re.search(regex, args):
-			time.sleep(0.1)
 			logging.info("FOUND " + regex)
 			NotFound = False
-			return (open(path).read(), True)
+			return (open(path, "r").read(), True)
 		else:
 			NotFound = True
 	if NotFound:
 		logging.info("NOT FOUND TEMAS " + args)
-		return (open(error_notfound).read().format(query=args), False)
+		return (open(error_notfound, "r").read().format(query=args), False)
 		
 # ----------------------------------------- Comandos -----------------------------------------
 
@@ -158,12 +157,9 @@ def temas(bot, update, args: str):
 		logging.info("TEMAS QUERY RX " + str(update.message.chat_id) + ": " +  argumentos)
 		bot.sendChatAction(chat_id=update.message.chat_id, action=ChatAction.TYPING)
 		response = temas_query(argumentos)
-		text = response[0]
+		text = str(response[0])
 		SearchSucceeded = response[1]
-		if not SearchSucceeded:
-			bot.sendMessage(chat_id=update.message.chat_id, text=text, parse_mode="Markdown", disable_web_page_preview=True)
-		else:
-			bot.sendMessage(chat_id=update.message.chat_id, text=text, parse_mode="Markdown")
+		bot.sendMessage(chat_id=update.message.chat_id, text=text, parse_mode="Markdown", disable_web_page_preview=True)
 		
 # About
 def about(bot, update):
@@ -183,6 +179,16 @@ def unknown(bot, update):
 	message = update.message.text
 	logging.info("COMMAND RX " + str(update.message.chat_id) + ": " +  message)
 	bot.sendMessage(chat_id=update.message.chat_id, text="Lo siento, no reconozco ese comando 😕")
+	
+# Difusión a todos los subscriptores
+def broadcast(bot, update, args: str):
+	cuerpo = args
+	for _ in user_set:
+		bot.sendMessage(chat_id=_, text=cuerpo)
+		
+def noticias(bot, update):
+	bot.sendMessage(chat_id=update.message.chat_id, text="Las Noticias de SEKMUN llegarán según estén disponibles.\nMientras tanto sigue el Twitter de SEKMUN https://twitter.com/sekmun")
+	
 
 # --------------------------------------------------------------------------------------------
 	
@@ -198,6 +204,10 @@ def text_parser(bot, update):
 		bot.sendMessage(chat_id=update.message.chat_id, text=text, parse_mode="Markdown", disable_web_page_preview=True)
 	else:
 		bot.sendMessage(chat_id=update.message.chat_id, text=text, parse_mode="Markdown")
+		
+def error(bot, update, error):
+    logger.warn('Update "%s" caused error "%s"' % (update, error))
+    bot.sendMessage(chat_id=update.message.chat_id, text="Error Crítico: {}\n\nPor favor envía una captura de este mensaje a @margobra8".format(error), disable_web_page_preview=True)
 	
 # Command Handlers
 start_handler = CommandHandler('start', start)
@@ -214,13 +224,18 @@ leave_handler = CommandHandler('desconectar', leave)
 dispatcher.add_handler(leave_handler)
 temas_handler = CommandHandler('temas', temas, pass_args=True)
 dispatcher.add_handler(temas_handler)
-
+broadcast_handler = CommandHandler('broadcast', broadcast, pass_args=True)
+dispatcher.add_handler(broadcast_handler)
+noticias_handler = CommandHandler('noticias', noticias)
+dispatcher.add_handler(noticias_handler)
 
 # Message Handlers
 unknown_handler = MessageHandler(Filters.command, unknown)
 dispatcher.add_handler(unknown_handler)
 query_handler = MessageHandler(Filters.text, text_parser)
 dispatcher.add_handler(query_handler)
+
+dispatcher.add_error_handler(error)
 
 # Iniciar bot
 logging.info("BOT INSTANCE INITIATED AT " + datetime.now().strftime('%d/%m/%Y %H:%M:%S'))

@@ -9,10 +9,8 @@ _Noticias SEKMUN_ - Te notificaré automáticamente cada vez que se publique inf
 /temas (comité) - Información básica sobre los temas y subtemas
 /status - Comprueba el estado y funcionamiento del bot (por si algo no funciona)
 /about - Información sobre el bot y su creación
-
-*Usa* /ayuda *cuando quieras para volver a mostrar este mensaje*
-
-_2. En etapa de desarrollo:
 /autoridades - Proporciona los nombres de las autoridades por comités
 /docs - Enlaces a documentos suplementarios y a sitios web
-/hoy - Proporciona el horario de SEKMUN de hoy de forma resumida_
+/hoy - Proporciona el horario de SEKMUN de hoy de forma resumida
+
+*Usa* /ayuda *cuando quieras para volver a mostrar este mensaje*
