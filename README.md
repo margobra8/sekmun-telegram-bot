@@ -19,5 +19,5 @@ Agradecimientos
 --------
 * [La comunidad SEKMUN](http://sekmun.blogsek.es/)
 * [SEK-Ciudalcampo International School](http://ciudalcampo.sek.es/)
-* [Club de Programación SEK-Ciudalcampo](http://code-sekcc.ml)
-* [STEAMOVE Team](http://github.com/margobra8)
+* [Club de Programación SEK-Ciudalcampo](http://code-sekcc.github.io/)
+* [STEAMOVE Team](http://github.com/code-sekcc)
